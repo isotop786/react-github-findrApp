@@ -8,6 +8,8 @@ const Users = ({users,loading})=>{
     
     if(loading){
         return <Spinner/>
+        // return <LoadingComp/>
+        
     }else{
         return(
             <div  style={userStyle}>

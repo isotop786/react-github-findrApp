@@ -11,7 +11,8 @@ const Spinner = ()=>{
 const SpinnerStyle = {
     width:'200px',
     margin:'auto',
-    display:'block'
+    display:'block',
+    background:'#eee'
 }
 
 
