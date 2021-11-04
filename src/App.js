@@ -55,7 +55,7 @@ class App extends Component{
   getUser = async (username)=>{
     this.setState({loading:true})
 
-    const res = await axios.get(`https://api.github.com/users/${username}&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`)
+    const res = await axios.get(`https://api.github.com/users/${username}`)
     // const res = await axios.get(`https://api.github.com/users/${username}&client_id=db5a6212026541641102&client_secret=bcd20320521bef8115c4061f8f6488c5774a1e27`)
     
     this.setState({user:res.data,loading:false})
@@ -95,7 +95,12 @@ class App extends Component{
 
   async componentDidMount(){
     this.setState({loading:true})  
-    const res = await axios.get(`https://api.github.com/users?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`)
+    const res = await axios.get(`https://api.github.com/users?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}
+    , {
+      headers: {
+          'Authorization': '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',
+      }
+    `)
     this.setState({users:res.data, loading:false})
   }
 
