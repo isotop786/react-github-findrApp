@@ -7,7 +7,7 @@
 
 /* Global Styles */
 :root {
-  --primary-color: #ff8c8c;
+  --primary-color: #70b5f5;
   --dark-color: #212121;
   --light-color: #f4f4f4;
   --danger-color: #FF0000;
@@ -393,6 +393,13 @@ table th {
     grid-template-columns: 1fr;
   }
 
+  .gr {
+    display:grid;
+    grid-gap:1rem;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content:evenly;
+}
+
   /* Text Styles */
   .x-large {
     font-size: 3rem;
@@ -416,4 +423,6 @@ table th {
     text-align: center;
     justify-content: center;
   }
+
+  
 }

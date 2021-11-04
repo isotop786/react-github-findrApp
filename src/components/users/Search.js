@@ -14,7 +14,7 @@ class Search extends Component{
         this.setState({text:e.target.value}) 
         // this.props.userLoaded = false
     } 
- 
+  
     onSubmit = (e)=>{
         e.preventDefault();
   
