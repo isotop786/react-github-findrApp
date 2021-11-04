@@ -55,7 +55,7 @@ class App extends Component{
   getUser = async (username)=>{
     this.setState({loading:true})
 
-    const res = await axios.get(`https://api.github.com/users/${username}`)
+    const res = await axios.get(`https://api.github.com/users/${username}&client_id=db5a6212026541641102&client_secret=bcd20320521bef8115c4061f8f6488c5774a1e27`)
     
     this.setState({user:res.data,loading:false})
 
@@ -65,7 +65,7 @@ class App extends Component{
   getRepos = async username => {
     this.setState({loading:true})
     
-    const res = await axios.get(`https://api.github.com/users/${username}/repos`)
+    const res = await axios.get(`https://api.github.com/users/${username}/repos&client_id=db5a6212026541641102&client_secret=bcd20320521bef8115c4061f8f6488c5774a1e27`)
 
     this.setState({repos:res.data})
   }
@@ -74,7 +74,7 @@ class App extends Component{
 
   getFollower = async username =>{
     this.setState({loading:true})
-    const res = await axios.get(`https://api.github.com/users/${username}/followers`)
+    const res = await axios.get(`https://api.github.com/users/${username}/followers&client_id=db5a6212026541641102&client_secret=bcd20320521bef8115c4061f8f6488c5774a1e27`)
 
     console.log("followers "+res.data)
     this.setState({followers:res.data})
@@ -84,7 +84,7 @@ class App extends Component{
  
   getFollowing = async username =>{
     this.setState({loading:true})
-    const res = await axios.get(`https://api.github.com/users/${username}/following`)
+    const res = await axios.get(`https://api.github.com/users/${username}/following&client_id=db5a6212026541641102&client_secret=bcd20320521bef8115c4061f8f6488c5774a1e27`)
     console.log("followings "+res.data)
     this.setState({followings:res.data})
   }
