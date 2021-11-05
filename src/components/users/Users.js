@@ -13,7 +13,7 @@ const Users = ({users,loading})=>{
     }else{
         return(
             <div  style={userStyle}>
-                {users.length > 0 && users.map(user =>(
+                {users !==null && users.map(user =>(
                     <UserItem key={user.id} user={user}/>
                 )) }
             </div>

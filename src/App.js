@@ -1,4 +1,4 @@
-import react,{Component} from "react";
+import react,{Component,useState,useEffect} from "react";
 import Navbar from './components/layout/Navbar'
 import Users from './components/users/Users'
 import axios from "axios";
@@ -15,129 +15,138 @@ import {
 } from "react-router-dom";
 
 
-class App extends Component{
-
-  state = {
-    users:[],
-    loading:false,
-    offline:false,
-    usersLoaded:false,
-    alert:null,
-    user:{},
-    repos:[],
-    followers:[],
-    followings:[]
-  }
+const App  = ()=>{
 
 
-  searchUsers = async text => {
-    this.setState({loading:true})
+
+
+  const [users,setUsers] = useState([])
+  const [loading,setLoading] = useState(false)
+  const [offline, setOffline] = useState(false)
+  const [usersLoaded, setUserLoaded] = useState(false)
+  const [alert,setAlertstate] = useState(null)
+  const [user,setUser] = useState({})
+  const [repos,setRepos] = useState([])
+  const [followers,setFollowers] = useState([])
+  const [followings,setFollowings] = useState([])
+
+
+
+
+   const  searchUsers = async  (text) => {
+    
+    setLoading(true)
     const res = await axios.get(`https://api.github.com/search/users?q=${text}&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`)
 
-     this.setState({users:res.data.items, loading:false})
-     this.setState({usersLoaded:true})
-     this.setState({alert:null})
-     console.log(res)
+    setUsers(res.data.items)
+    setLoading(false)
+
+    setAlertstate(null)
+    console.log(res.data.items)
 
   }
 
-  clearUsers = ()=>{
-    this.setState({users:[],usersLoaded:false})
+  const clearUsers = ()=>{
+    setUsers([])
+    setUserLoaded(false)
   }
 
-  setAlert = (text,type)=>{
-    this.setState({alert:{text,type}})
+  const setAlert = (text,type)=>{
     
-    setTimeout(()=>this.setState({alert:null}),1000)
+    setAlertstate(text,type)
+  
+    setTimeout(()=> setAlertstate(null),1000)
   }
 
   // get a single user
-  getUser = async (username)=>{
-    this.setState({loading:true})
+  const getUser = async (username)=>{
+    
+    setLoading(true)
 
     const res = await axios.get(`https://api.github.com/users/${username}`)
-    // const res = await axios.get(`https://api.github.com/users/${username}&client_id=db5a6212026541641102&client_secret=bcd20320521bef8115c4061f8f6488c5774a1e27`)
     
-    this.setState({user:res.data,loading:false})
+    setUser(res.data)
+    setLoading(false)
 
   }
 
   // getting repos of a user
-  getRepos = async username => {
-    this.setState({loading:true})
-    
-    // const res = await axios.get(`https://api.github.com/users/${username}/repos&client_id=db5a6212026541641102&client_secret=bcd20320521bef8115c4061f8f6488c5774a1e27`)
-    const res = await axios.get(`https://api.github.com/users/${username}/repos?sort=created_at`)
+  const getRepos = async username => {
+   
+    setLoading(true)
+   const res = await axios.get(`https://api.github.com/users/${username}/repos?sort=created_at`)
 
-    this.setState({repos:res.data})
+    setRepos(res.data)
   }
 
   // get followers 
-
-  getFollower = async username =>{
-    this.setState({loading:true})
-    // const res = await axios.get(`https://api.github.com/users/${username}/followers&client_id=db5a6212026541641102&client_secret=bcd20320521bef8115c4061f8f6488c5774a1e27`)
+  const getFollower = async username =>{
+    
+    setLoading(true)
     const res = await axios.get(`https://api.github.com/users/${username}/followers`)
 
-    console.log("followers "+res.data)
-    this.setState({followers:res.data})
+    setFollowers(res.data)
   }
 
   //  get followers
- 
-  getFollowing = async username =>{
-    this.setState({loading:true})
+  const getFollowing = async username =>{
+    setLoading(true)
     const res = await axios.get(`https://api.github.com/users/${username}/following`)
-    console.log("followings "+res.data)
-    this.setState({followings:res.data})
+    setFollowings(res.data)
   }
 
 
-  async componentDidMount(){
-    this.setState({loading:true})  
-    const res = await axios.get(`https://api.github.com/users?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}
+
+  useEffect(()=>{
+    setLoading(true)
+    
+    axios.get(`https://api.github.com/users?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}
     , {
       headers: {
           'Authorization': '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',
       }
     `)
-    this.setState({users:res.data, loading:false})
-  }
+    .then((res)=>{
+        setUsers(res.data)
+        setLoading(false)
+       
+    })
+    .catch(err=>{
+      console.log(err)
+    })
 
+  },[])
 
-  render(){
-    
+ 
     
     return(
       <Router>
-
-      
         <div>
           <Navbar title="GitHub Findr" icon="fab fa-github"/>
-        <div className="container">
+            <div className="container">
           
 
-          <Switch>
-            <Route exact path='/'>
-            {this.state.alert !== null && <Alert alert={this.state.alert}/>}
-          {this.state.alert && this.setAlert }
-          <Search searchUser={this.searchUsers} userLoaded={this.state.usersLoaded} clearUsers={this.clearUsers}
-            setAlert={this.setAlert}
-          />
-                <Users loading={this.state.loading} users={this.state.users} />
+              <Switch>
+                <Route exact path='/'>
+                {alert !== null && <Alert alert={alert}/>}
+              { alert && setAlert }
+              <Search searchUser={searchUsers} userLoaded={usersLoaded} clearUsers={clearUsers}
+                setAlert={setAlert}
+              />
+                <Users loading={loading} users={users} />
             </Route>
-            <Route exact path="/user/:login" render={props => (
-              <Single {...props} getUser={this.getUser} user={this.state.user}
-               loading={this.state.loading}
-               getRepos={this.getRepos}
-               repos = {this.state.repos}
-               getFollowers={this.getFollower}
-               followers={this.state.followers}
+              <Route exact path="/user/:login" render={props => (
+                <Single {...props} getUser={getUser} user={user}
+                loading={loading}
+                getRepos={getRepos}
+                repos = {repos}
+                getFollowers={getFollower}
+                followers={followers}
 
-               getFollowing={this.getFollowing}
-               followings={this.state.followings}
-               />
-            )}>
+                getFollowing={getFollowing}
+                followings={followings}
+                />
+              )}>
 
             </Route>
 
@@ -159,6 +168,6 @@ class App extends Component{
       </Router>
     )
   }
-}
+
 
 export default App;

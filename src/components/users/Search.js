@@ -1,55 +1,39 @@
-import React, {Component} from 'react' 
+import React, {Component,useState,useEffect} from 'react' 
 import PropTypes from 'prop-types'
 import Alert from '../layout/Alert';
 
-class Search extends Component{
-    state ={
-        text: '',
-        dis:false
-    }
+const Search = ({searchUser,setAlert,userLoaded,clearUsers})=>{
+   
+    const [text,setText] = useState()
+    const [dis, setDis] = useState(false)
 
     
+    const onChange = (e)=> setText(e.target.value)
 
-    onChange = (e)=>{
-        this.setState({text:e.target.value}) 
-        // this.props.userLoaded = false
-    } 
-  
-    onSubmit = (e)=>{
+    const onSubmit = (e)=>{
         e.preventDefault();
   
 
-            if(this.state.text !== ''){
+            if(text !== ''){
             
-            this.props.searchUser(this.state.text)
-            this.setState({text: ''})
+            searchUser(text)
+
+            setText('')
+
             }else{
-
-                this.props.setAlert('Plese input a username','danger')
-              
+                setAlert('Plese input a username','danger')
             }
-
-    // }
     }
 
-    render(){
-        const {userLoaded} = this.props
-        const {clearUsers} = this.props
-        
         
         return(
             <div>
-                {/* {alert !== null && <Alert alert={alert}/>} */}
-                {/* {this.state.dis && <div className="alert alert-danger">Please input a username</div>}
- */}
-
-                <form className='form' onSubmit={this.onSubmit}>  
+      
+                <form className='form' onSubmit={onSubmit}>  
                     <input type="text" name="text" placeholder="Search Users..." id="" 
-                    value={this.state.text} onChange={this.onChange}
+                    value={text} onChange={onChange}
                     />
-                    {/* <input type="submit" value={userLoaded ? 'Clear' : 'Search'}
-                    className={`btn btn-block ${userLoaded ? 'btn-danger ': 'btn-dark '}`}
-                    /> */}
+                 
                     <input type="submit" value='Search'
                     className={`btn btn-block ${userLoaded ? 'btn-primary ': 'btn-dark '}`}
                     />
@@ -59,7 +43,7 @@ class Search extends Component{
             </div>
         )
     }   
-}
+
 
 
 Search.propTypes = {

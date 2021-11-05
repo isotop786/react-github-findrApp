@@ -1,4 +1,4 @@
-import React,{Component,Fragment} from 'react'
+import React,{Component,Fragment, useEffect} from 'react'
 import {  useParams} from 'react-router-dom'
 import Spinner from '../layout/Spinner'
 import PropTypes from 'prop-types';
@@ -13,22 +13,17 @@ import {
   } from "react-router-dom";
 
 
-class Single extends Component {
+const Single = ({user,match,loading, followers,followings,getUser,getRepos,getFollowers,getFollowing,repos})=> {
 
-    
+        useEffect(()=>{
+            const username = match.params.login
+            getUser(username)
+            getRepos(username)
+            getFollowers(username)
+            getFollowing(username)
 
-    componentDidMount(){
-       const username = this.props.match.params.login
-       this.props.getUser(username)
-       this.props.getRepos(username)
-       this.props.getFollowers(username)
-       this.props.getFollowing(username)
+        },[])
 
-    }
-
-
-    render(){
-        const {user,loading, followers,followings} = this.props
 
 
         return(
@@ -107,7 +102,7 @@ class Single extends Component {
                             </div>
                             <Switch>
                                 <Route exact path='/repos'>
-                                    <Repo repos={this.props.repos}/>
+                                    <Repo repos={repos}/>
                                 </Route>
                                 <Route exact path='/followings'>
                                     {/* <Following followings={followings}/> */}
@@ -134,7 +129,7 @@ class Single extends Component {
             </Fragment>
         )
     }
-}
+
 
 const imgStyle={
     width:'100px',
