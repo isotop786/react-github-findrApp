@@ -128,7 +128,7 @@ class Single extends Component {
                 .nav{
                     width:50%;
                     display:flex;
-                    justify-content:space-around;
+                    justify-content:space-between;
                 }
                 `}</style>
             </Fragment>

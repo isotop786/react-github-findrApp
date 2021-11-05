@@ -67,7 +67,7 @@ class App extends Component{
     this.setState({loading:true})
     
     // const res = await axios.get(`https://api.github.com/users/${username}/repos&client_id=db5a6212026541641102&client_secret=bcd20320521bef8115c4061f8f6488c5774a1e27`)
-    const res = await axios.get(`https://api.github.com/users/${username}/repos`)
+    const res = await axios.get(`https://api.github.com/users/${username}/repos?sort=created_at`)
 
     this.setState({repos:res.data})
   }
