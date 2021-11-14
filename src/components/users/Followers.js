@@ -1,6 +1,14 @@
+import { useContext } from 'react';
+import GitHubContext from '../../context/github/githubContext'
+
 import FollowerItem from './FollowerItem'
 
-const Followers = ({fprops,title}) =>{
+const Followers = ({title}) =>{
+
+    const getHubContext = useContext(GitHubContext);
+
+    const {followers} = getHubContext;
+
     return (
         <>
         <div className="text-center my-1">
@@ -8,7 +16,7 @@ const Followers = ({fprops,title}) =>{
         </div>
        
         <div className="gr">
-            {fprops.map(fprop=>(
+            {followers.map(fprop=>(
                 <FollowerItem fprop={fprop}/>
             ))}
 

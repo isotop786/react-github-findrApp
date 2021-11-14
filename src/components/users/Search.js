@@ -1,11 +1,20 @@
 import React, {Component,useState,useEffect} from 'react' 
 import PropTypes from 'prop-types'
 import Alert from '../layout/Alert';
+import {useContext} from 'react'
+import GithubContext from '../../context/github/githubContext';
+import AlertContext from '../../context/alert/alertContext';
 
-const Search = ({searchUser,setAlert,userLoaded,clearUsers})=>{
+const Search = ()=>{
    
-    const [text,setText] = useState()
-    const [dis, setDis] = useState(false)
+    const alertContext = useContext(AlertContext)
+    const githubContext = useContext(GithubContext)
+    
+    const [text,setText] = useState('')
+    // const [dis, setDis] = useState(false)
+
+    const {alert,setAlert} = alertContext;
+
 
     
     const onChange = (e)=> setText(e.target.value)
@@ -14,9 +23,10 @@ const Search = ({searchUser,setAlert,userLoaded,clearUsers})=>{
         e.preventDefault();
   
 
-            if(text !== ''){
+            if(text !==''){
             
-            searchUser(text)
+            githubContext.searchUsers(text)
+            // searchUser(text)
 
             setText('')
 
@@ -28,17 +38,17 @@ const Search = ({searchUser,setAlert,userLoaded,clearUsers})=>{
         
         return(
             <div>
-      
+                {alert && <Alert/>}
                 <form className='form' onSubmit={onSubmit}>  
                     <input type="text" name="text" placeholder="Search Users..." id="" 
                     value={text} onChange={onChange}
                     />
                  
                     <input type="submit" value='Search'
-                    className={`btn btn-block ${userLoaded ? 'btn-primary ': 'btn-dark '}`}
+                    className='btn btn-block btn-dark'
                     />
                 </form>
-                {userLoaded && <button className="btn btn-block btn-success" onClick={()=> clearUsers()}>Clear</button>}
+                {githubContext.users.length >0  && <button className="btn btn-block btn-success" onClick={()=> githubContext.clearUsers()}>Clear</button>}
 
             </div>
         )
@@ -47,8 +57,7 @@ const Search = ({searchUser,setAlert,userLoaded,clearUsers})=>{
 
 
 Search.propTypes = {
-    searchUser: PropTypes.func.isRequired,
-    clearUsers: PropTypes.func.isRequired,
+    
     alert: PropTypes.object
 }
 

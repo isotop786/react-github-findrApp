@@ -1,4 +1,4 @@
-import React,{Component,Fragment, useEffect} from 'react'
+import React,{Component,Fragment, useEffect,useContext} from 'react'
 import {  useParams} from 'react-router-dom'
 import Spinner from '../layout/Spinner'
 import PropTypes from 'prop-types';
@@ -12,14 +12,21 @@ import {
     Link
   } from "react-router-dom";
 
+import GithubContext from '../../context/github/githubContext';
 
-const Single = ({user,match,loading, followers,followings,getUser,getRepos,getFollowers,getFollowing,repos})=> {
+
+
+
+const Single = ({match,followings,getFollowing})=> {
+
+    const gitHubContext = useContext(GithubContext);
+        const{getUser,user,loading,repos,getRepos,getFollower} = gitHubContext;
 
         useEffect(()=>{
             const username = match.params.login
             getUser(username)
             getRepos(username)
-            getFollowers(username)
+            getFollower(username)
             getFollowing(username)
 
         },[])
@@ -31,8 +38,8 @@ const Single = ({user,match,loading, followers,followings,getUser,getRepos,getFo
                 <Link  to='/'>
                     <span className="btn btn-danger" style={{borderRadius:'5px'}}>Back</span>
                 </Link>
-                {loading && <Spinner/>}
-                {user && <h3>{user.login}</h3>}
+                {loading ? <Spinner/> : user && <h3>{user.login}</h3> }
+                {}
             
                 <p>Hireable: {' '} 
                 
@@ -106,10 +113,10 @@ const Single = ({user,match,loading, followers,followings,getUser,getRepos,getFo
                                 </Route>
                                 <Route exact path='/followings'>
                                     {/* <Following followings={followings}/> */}
-                                    <Followers fprops={followings} title="Followings"/>
+                                    <Following fprops={followings} title="Followings"/>
                                 </Route>
                                 <Route exact path='/followers'>
-                                    <Followers fprops={followers} title="Followers"/>
+                                    <Followers  title="Followers"/>
                                 </Route>
                             </Switch>
                             </Router>

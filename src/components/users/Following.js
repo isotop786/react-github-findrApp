@@ -2,11 +2,11 @@
 import FollowingItem from "./FollowingItem";
 
 
-const Following = ({followings}) =>{
+const Following = ({fprops,title}) =>{
     return (
         <div className="gr">
-            <h2>Following</h2>
-            {followings.map(following=>(
+            <h2>{title}</h2>
+            {fprops.map(following=>(
                 <FollowingItem following={following}/>
             ))}
 
